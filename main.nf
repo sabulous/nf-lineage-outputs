@@ -1,8 +1,5 @@
-params.outdir = 's3://sabri-eu-west2-test/lineage-11272'
-
 process writeResult {
     container 'ubuntu:22.04'
-    publishDir params.outdir, mode: 'copy'
 
     output:
     path 'result.txt'
@@ -14,5 +11,15 @@ process writeResult {
 }
 
 workflow {
-    writeResult()
+    main:
+    ch_result = writeResult()
+
+    publish:
+    result = ch_result
+}
+
+output {
+    result {
+        path '.'
+    }
 }
